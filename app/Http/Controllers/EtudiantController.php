@@ -34,7 +34,7 @@ class EtudiantController extends Controller
         $filieres = Filiere::orderBy('nom')->get();
 
         $creneaux = Creneau::withoutGlobalScopes()
-            ->orderByRaw('FIELD(jour,"Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi")')
+            ->orderByRaw(Creneau::getDayOrderClause())
             ->orderBy('heure_debut')
             ->get()
             ->unique(fn($c) => $c->heure_debut . '-' . $c->heure_fin);
@@ -67,7 +67,7 @@ class EtudiantController extends Controller
                 ->get();
 
             $creneaux = Creneau::withoutGlobalScopes()
-                ->orderByRaw('FIELD(jour,"Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi")')
+                ->orderByRaw(Creneau::getDayOrderClause())
                 ->orderBy('heure_debut')
                 ->get()
                 ->unique(fn($c) => $c->heure_debut . '-' . $c->heure_fin);
@@ -86,7 +86,7 @@ class EtudiantController extends Controller
         }
 
         $creneaux = Creneau::withoutGlobalScopes()
-            ->orderByRaw('FIELD(jour,"Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi")')
+            ->orderByRaw(Creneau::getDayOrderClause())
             ->orderBy('heure_debut')
             ->get()
             ->unique(fn($c) => $c->heure_debut . '-' . $c->heure_fin);
@@ -112,7 +112,7 @@ class EtudiantController extends Controller
     $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
 
     $creneaux = \App\Models\Creneau::withoutGlobalScopes()
-        ->orderByRaw('FIELD(jour,"Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi")')
+        ->orderByRaw(\App\Models\Creneau::getDayOrderClause())
         ->orderBy('heure_debut')
         ->get()
         ->unique(fn($c) => $c->heure_debut . '-' . $c->heure_fin);

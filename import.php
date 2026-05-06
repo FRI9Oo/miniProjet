@@ -1,9 +1,9 @@
 <?php
 $host = 'trolley.proxy.rlwy.net';
-$port = '22168';
+$port = '56341';
 $db   = 'railway';
 $user = 'root';
-$pass = 'SYwonwLBGeETVYPayHLzFpnwzibIlCUQ';
+$pass = 'CWzgrUryoiVtdCdITUYNoGbiaHOfgFEH';
 
 $pdo = new PDO("mysql:host=$host;port=$port;dbname=$db", $user, $pass);
 $sql = file_get_contents('database_dump.sql');

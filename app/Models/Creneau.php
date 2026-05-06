@@ -19,10 +19,29 @@ class Creneau extends Model
     protected static function booted(): void
     {
         static::addGlobalScope('ordered', function ($query) {
-            $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-            $query->orderByRaw('FIELD(jour, "' . implode('","', $jours) . '")')
+            $query->orderByRaw(self::getDayOrderClause())
                   ->orderBy('heure_debut');
         });
+    }
+
+    /**
+     * Get database-agnostic ORDER BY clause for days of week
+     */
+    public static function getDayOrderClause(): string
+    {
+        $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+
+        // For SQLite, use CASE statement
+        if (config('database.default') === 'sqlite') {
+            $cases = [];
+            foreach ($jours as $index => $jour) {
+                $cases[] = "WHEN '{$jour}' THEN {$index}";
+            }
+            return 'CASE jour ' . implode(' ', $cases) . ' END';
+        }
+
+        // For MySQL, use FIELD function
+        return 'FIELD(jour, "' . implode('","', $jours) . '")';
     }
 
     // A creneau has many emplois du temps

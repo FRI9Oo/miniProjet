@@ -10,7 +10,7 @@ class CreneauController extends Controller
     public function index()
     {
         $creneaux = Creneau::withoutGlobalScopes()
-            ->orderByRaw('FIELD(jour,"Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi")')
+            ->orderByRaw(Creneau::getDayOrderClause())
             ->orderBy('heure_debut')
             ->get();
         return view('creneaux.index', compact('creneaux'));

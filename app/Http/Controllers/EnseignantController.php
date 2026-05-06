@@ -91,7 +91,7 @@ class EnseignantController extends Controller
         $enseignant = Enseignant::findOrFail(auth()->user()->enseignant_id);
 
         $creneaux = \App\Models\Creneau::withoutGlobalScopes()
-            ->orderByRaw('FIELD(jour,"Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi")')
+            ->orderByRaw(\App\Models\Creneau::getDayOrderClause())
             ->orderBy('heure_debut')
             ->get()
             ->unique(fn($c) => $c->heure_debut . '-' . $c->heure_fin);
@@ -115,7 +115,7 @@ class EnseignantController extends Controller
         $enseignant = Enseignant::findOrFail(auth()->user()->enseignant_id);
 
         $creneaux = \App\Models\Creneau::withoutGlobalScopes()
-            ->orderByRaw('FIELD(jour,"Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi")')
+            ->orderByRaw(\App\Models\Creneau::getDayOrderClause())
             ->orderBy('heure_debut')
             ->get()
             ->unique(fn($c) => $c->heure_debut . '-' . $c->heure_fin);

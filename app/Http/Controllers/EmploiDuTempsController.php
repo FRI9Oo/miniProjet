@@ -35,7 +35,7 @@ class EmploiDuTempsController extends Controller
         $salles      = Salle::disponible()->orderBy('nom')->get();
         $matieres    = Matiere::with('filieres')->orderBy('nom')->get();
         $creneaux    = Creneau::withoutGlobalScopes()
-                        ->orderByRaw('FIELD(jour,"Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi")')
+                        ->orderByRaw(Creneau::getDayOrderClause())
                         ->orderBy('heure_debut')
                         ->get();
 
@@ -95,7 +95,7 @@ return redirect()->route('emplois.index')
                         })->orderBy('nom')->get();
         $matieres    = Matiere::with('filieres')->orderBy('nom')->get();
         $creneaux    = Creneau::withoutGlobalScopes()
-                        ->orderByRaw('FIELD(jour,"Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi")')
+                        ->orderByRaw(Creneau::getDayOrderClause())
                         ->orderBy('heure_debut')
                         ->get();
 
@@ -157,7 +157,7 @@ return redirect()->route('emplois.filiere', $request->filiere_id)
     {
         $jours    = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
         $creneaux = Creneau::withoutGlobalScopes()
-                        ->orderByRaw('FIELD(jour,"Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi")')
+                        ->orderByRaw(Creneau::getDayOrderClause())
                         ->orderBy('heure_debut')
                         ->get()
                         ->unique(fn($c) => $c->heure_debut . '-' . $c->heure_fin);
@@ -183,7 +183,7 @@ return redirect()->route('emplois.filiere', $request->filiere_id)
     {
         $jours    = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
         $creneaux = Creneau::withoutGlobalScopes()
-                        ->orderByRaw('FIELD(jour,"Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi")')
+                        ->orderByRaw(Creneau::getDayOrderClause())
                         ->orderBy('heure_debut')
                         ->get()
                         ->unique(fn($c) => $c->heure_debut . '-' . $c->heure_fin);
