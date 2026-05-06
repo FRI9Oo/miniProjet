@@ -5,9 +5,13 @@ RUN apt-get update && apt-get install -y \
 
 RUN docker-php-ext-install pdo pdo_mysql zip
 
-# Disable conflicting MPM modules, enable only prefork
-RUN a2dismod mpm_event mpm_worker 2>/dev/null || true && \
-    a2enmod mpm_prefork
+# Nuclear option: remove ALL mpm symlinks from mods-enabled, then re-add only prefork
+RUN rm -f /etc/apache2/mods-enabled/mpm_*.load \
+          /etc/apache2/mods-enabled/mpm_*.conf && \
+    ln -sf /etc/apache2/mods-available/mpm_prefork.load \
+           /etc/apache2/mods-enabled/mpm_prefork.load && \
+    ln -sf /etc/apache2/mods-available/mpm_prefork.conf \
+           /etc/apache2/mods-enabled/mpm_prefork.conf
 
 RUN a2enmod rewrite
 
